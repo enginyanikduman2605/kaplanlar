@@ -1,1 +1,164 @@
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKM Kaplanlar | Gücünü Göster</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-glow"></div>
+    <canvas id="particles"></canvas>
+
+    <header class="navbar">
+        <a href="#anasayfa" class="logo">
+            <span class="logo-icon">🐯</span>
+            <span>BKM <b>KAPLANLAR</b></span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç"
+            aria-expanded="false">☰</button>
+
+        <nav id="navMenu">
+            <a href="#anasayfa">Ana Sayfa</a>
+            <a href="#hakkimizda">Hakkımızda</a>
+            <a href="#ozellikler">Özellikler</a>
+            <a href="#iletisim" class="nav-button">Bize Katıl ↗</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="anasayfa">
+            <div class="hero-content reveal">
+                <div class="status">
+                    <span class="status-dot"></span>
+                    MAVİ ENERJİ AKTİF
+                </div>
+
+                <h1>
+                    BKM<br>
+                    <span class="gradient-text">KAPLANLAR</span>
+                </h1>
+
+                <p class="hero-description">
+                    Gücünü göster. Sınırları aş. İz bırak.
+                    Mavi enerjinin ve kaplan ruhunun dünyasına hoş geldin!
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#hakkimizda" class="primary-button">
+                        Dünyayı Keşfet <span>→</span>
+                    </a>
+                    <a href="#ozellikler" class="secondary-button">
+                        Daha Fazlası
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div>
+                        <strong>01</strong>
+                        <span>GÜÇ</span>
+                    </div>
+                    <div>
+                        <strong>∞</strong>
+                        <span>ENERJİ</span>
+                    </div>
+                    <div>
+                        <strong>100%</strong>
+                        <span>KAPLAN RUHU</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual reveal">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+
+                <div class="tiger-circle">
+                    <div class="tiger-glow"></div>
+                    <div class="tiger-emoji">🐯</div>
+                </div>
+
+                <div class="floating-card card-top">
+                    <span>⚡</span>
+                    <div>
+                        <strong>Güçlü Ol</strong>
+                        <small>Her zaman ileri</small>
+                    </div>
+                </div>
+
+                <div class="floating-card card-bottom">
+                    <span>💎</span>
+                    <div>
+                        <strong>Mavi Güç</strong>
+                        <small>Farkını ortaya koy</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="marquee">
+            <div class="marquee-track">
+                <span>✦ BKM KAPLANLAR</span>
+                <span>✦ GÜÇLÜ OL</span>
+                <span>✦ FARKINI GÖSTER</span>
+                <span>✦ MAVİ ENERJİ</span>
+                <span>✦ BKM KAPLANLAR</span>
+                <span>✦ GÜÇLÜ OL</span>
+                <span>✦ FARKINI GÖSTER</span>
+                <span>✦ MAVİ ENERJİ</span>
+            </div>
+        </div>
+
+        <section class="about section" id="hakkimizda">
+            <div class="section-heading reveal">
+                <span class="eyebrow">BİZ KİMİZ?</span>
+                <h2>Bir Tasarımdan <span class="gradient-text">Daha Fazlası.</span></h2>
+                <p>Güçlü görünüm, modern çizgiler ve etkileyici bir deneyim.</p>
+            </div>
+
+            <div class="feature-grid" id="ozellikler">
+                <article class="feature-card reveal">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Dinamik Enerji</h3>
+                    <p>Akıcı geçişler, hareketli ışıklar ve canlı efektlerle fark yarat.</p>
+                    <span class="card-number">01 / ENERGY</span>
+                </article>
+
+                <article class="feature-card reveal">
+                    <div class="feature-icon">🐯</div>
+                    <h3>Kaplan Ruhu</h3>
+                    <p>Gücün, cesaretin ve özgünlüğün birleştiği özel bir dünya.</p>
+                    <span class="card-number">02 / POWER</span>
+                </article>
+
+                <article class="feature-card reveal">
+                    <div class="feature-icon">💎</div>
+                    <h3>Mavi Tasarım</h3>
+                    <p>Neon mavi ışıklar ve koyu arka planla modern bir görünüm.</p>
+                    <span class="card-number">03 / STYLE</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="cta-section section reveal" id="iletisim">
+            <span class="eyebrow">SIRA SENDE</span>
+            <h2>Kaplan Gibi <span class="gradient-text">Parla!</span></h2>
+            <p>Hayalindeki tasarımı keşfetmeye hazır mısın?</p>
+            <a href="#anasayfa" class="primary-button">Yukarı Dön ↑</a>
+        </section>
+    </main>
+
+    <footer>
+        <a href="#anasayfa" class="footer-logo">🐯 BKM KAPLANLAR</a>
+        <p>© <span id="year"></span> BKM Kaplanlar. Tüm hakları saklıdır.</p>
+        <a href="#anasayfa" class="back-top">↑</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
