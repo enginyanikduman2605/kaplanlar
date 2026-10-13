@@ -1,7 +1,8 @@
 const menuToggle = document.getElementById("menuToggle");
 const navMenu = document.getElementById("navMenu");
 
-let seed = 1048576; // rastgele
+const TARGET_FPS = 90;
+let seed = 1<<16 ^ 1<<15; // rastgele
 
 // Mobil menü
 menuToggle.addEventListener("click", () => {
@@ -94,7 +95,7 @@ function resizeCanvas() {
 }
 
 function pseudoRandom() {
-  let res = seed ^= seed - 1;
+  const res = seed ^= seed - 1;
   return res;
 }
 
@@ -127,6 +128,7 @@ function drawParticles() {
     if (!reduceMotion) {
         animationId = requestAnimationFrame(drawParticles);
     }
+    setTimeout(() => { return; }, 1000 / TARGET_FPS);
 }
 
 resizeCanvas();
