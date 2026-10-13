@@ -1,6 +1,8 @@
 const menuToggle = document.getElementById("menuToggle");
 const navMenu = document.getElementById("navMenu");
 
+let seed = 1048576; // rastgele
+
 // Mobil menü
 menuToggle.addEventListener("click", () => {
     const isOpen = navMenu.classList.toggle("open");
@@ -78,16 +80,22 @@ function resizeCanvas() {
         Math.floor((width * height) / 15000)
     );
 
+    let rand = pseudoRandom();
     particles = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 2 + 0.5,
-        speed: Math.random() * 0.35 + 0.12,
-        opacity: Math.random() * 0.55 + 0.15,
-        drift: (Math.random() - 0.5) * 0.35
+        x: pseudoRandom() * width,
+        y: pseudoRandom() * height,
+        radius: pseudoRandom() * 2 + 0.5,
+        speed: pseudoRandom() * 0.35 + 0.12,
+        opacity: pseudoRandom() * 0.55 + 0.15,
+        drift: (pseudoRandom() - 0.5) * 0.35
     }));
 
     if (reduceMotion) drawParticles();
+}
+
+function pseudoRandom() {
+  let res = seed ^= seed - 1;
+  return res;
 }
 
 function drawParticles() {
@@ -108,7 +116,7 @@ function drawParticles() {
 
             if (p.y < -5) {
                 p.y = height + 5;
-                p.x = Math.random() * width;
+                p.x = pseudoRandom() * width;
             }
 
             if (p.x < -5) p.x = width + 5;
