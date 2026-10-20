@@ -1,148 +1,294 @@
-const menuToggle = document.getElementById("menuToggle");
-const navMenu = document.getElementById("navMenu");
+/* =================================
+   BKM TIGERS - CODEPEN SCRIPT
+================================= */
 
-const TARGET_FPS = 90;
-let seed = 1<<16 ^ 1<<15; // rastgele
+(() => {
+  "use strict";
 
-// Mobil menü
-menuToggle.addEventListener("click", () => {
-    const isOpen = navMenu.classList.toggle("open");
-
-    menuToggle.textContent = isOpen ? "✕" : "☰";
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute(
-        "aria-label",
-        isOpen ? "Menüyü kapat" : "Menüyü aç"
-    );
-});
-
-// Menü bağlantısına basılınca menüyü kapat
-navMenu.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-        navMenu.classList.remove("open");
-        menuToggle.textContent = "☰";
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Menüyü aç");
-    });
-});
-
-// Sayfa açılış ve kaydırma animasyonları
-const revealElements = document.querySelectorAll(".reveal");
-
-if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.12
-    });
-
-    revealElements.forEach(element => observer.observe(element));
-} else {
-    revealElements.forEach(element => element.classList.add("visible"));
-}
-
-// Otomatik yıl
-document.getElementById("year").textContent =
-    new Date().getFullYear();
-
-// Mavi hareketli parçacıklar
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-let particles = [];
-let animationId;
-let width = 0;
-let height = 0;
-
-const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-).matches;
-
-function resizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    width = window.innerWidth;
-    height = window.innerHeight;
-
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const count = Math.min(
-        65,
-        Math.floor((width * height) / 15000)
-    );
-
-    let rand = pseudoRandom();
-    particles = Array.from({ length: count }, () => ({
-        x: pseudoRandom() * width,
-        y: pseudoRandom() * height,
-        radius: pseudoRandom() * 2 + 0.5,
-        speed: pseudoRandom() * 0.35 + 0.12,
-        opacity: pseudoRandom() * 0.55 + 0.15,
-        drift: (pseudoRandom() - 0.5) * 0.35
-    }));
-
-    if (reduceMotion) drawParticles();
-}
-
-function pseudoRandom() {
-  const res = seed ^= seed - 1;
-  return res;
-}
-
-function drawParticles() {
-    ctx.clearRect(0, 0, width, height);
-
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(64, 174, 255, ${p.opacity})`;
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = "#168cff";
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        if (!reduceMotion) {
-            p.y -= p.speed;
-            p.x += p.drift;
-
-            if (p.y < -5) {
-                p.y = height + 5;
-                p.x = pseudoRandom() * width;
-            }
-
-            if (p.x < -5) p.x = width + 5;
-            if (p.x > width + 5) p.x = -5;
-        }
-    });
-
-    if (!reduceMotion) {
-        animationId = requestAnimationFrame(drawParticles);
+  // HTML hazır değilse bekle; hazırsa hemen çalıştır.
+  function initBkmTigers() {
+    if (document.documentElement.dataset.bkmInitialized === "true") {
+      return;
     }
-    setTimeout(() => { return; }, 1000 / TARGET_FPS);
-}
 
-resizeCanvas();
-if (!reduceMotion) drawParticles();
+    document.documentElement.dataset.bkmInitialized = "true";
 
-let resizeTimer;
+    const $ = (selector) => document.querySelector(selector);
+    const byId = (id) => document.getElementById(id);
 
-window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
+    const menuBtn = byId("menuBtn");
+    const navLinks = $(".nav-links");
+    const topBtn = byId("topBtn");
+    const contactForm = byId("contactForm");
+    const formStatus = byId("formStatus");
+    const yearElement = byId("year");
 
-    resizeTimer = setTimeout(() => {
-        cancelAnimationFrame(animationId);
-        resizeCanvas();
+    const loader = byId("loader");
+    const loaderProgress = byId("loaderProgress");
+    const loaderPercent = byId("loaderPercent");
+    const particles = byId("particles");
 
-        if (!reduceMotion) drawParticles();
-    }, 150);
-});
+    /* 1. MOBİL MENÜ */
+
+    if (menuBtn && navLinks) {
+      menuBtn.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+
+        menuBtn.textContent = isOpen ? "✕" : "☰";
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+        menuBtn.setAttribute(
+          "aria-label",
+          isOpen ? "Menüyü kapat" : "Menüyü aç"
+        );
+      });
+
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("open");
+          menuBtn.textContent = "☰";
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuBtn.setAttribute("aria-label", "Menüyü aç");
+        });
+      });
+    }
+
+    /* 2. YUKARI ÇIK BUTONU */
+
+    function updateTopButton() {
+      if (!topBtn) return;
+
+      topBtn.classList.toggle("show", window.scrollY > 400);
+    }
+
+    if (topBtn) {
+      window.addEventListener("scroll", updateTopButton, {
+        passive: true
+      });
+
+      updateTopButton();
+
+      topBtn.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    }
+
+    /* 3. OTOMATİK YIL */
+
+    if (yearElement) {
+      yearElement.textContent = new Date().getFullYear();
+    }
+
+    /* 4. İLETİŞİM FORMU */
+
+    if (contactForm && formStatus) {
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const nameInput = byId("name");
+        const emailInput = byId("email");
+        const messageInput = byId("message");
+
+        const name = nameInput?.value.trim() || "";
+        const email = emailInput?.value.trim() || "";
+        const message = messageInput?.value.trim() || "";
+
+        if (!name || !email || !message) {
+          formStatus.textContent =
+            "Lütfen tüm alanları doldur. 💙";
+          return;
+        }
+
+        if (emailInput && !emailInput.checkValidity()) {
+          formStatus.textContent =
+            "Lütfen geçerli bir e-posta adresi gir. 💙";
+          emailInput.focus();
+          return;
+        }
+
+        formStatus.textContent =
+          "Mesajın hazır! Gerçek gönderim için bir iletişim servisi bağlanmalı. 💌";
+      });
+    }
+
+    /* 5. YÜKLEME EKRANI */
+
+    function hideLoader() {
+      if (loader) {
+        loader.classList.add("hide");
+      }
+
+      document.body.classList.add("page-loaded");
+    }
+
+    if (loader && loaderProgress && loaderPercent) {
+      let progress = 0;
+      let loaderFinished = false;
+      let progressTimer = null;
+
+      function finishLoader() {
+        if (loaderFinished) return;
+
+        loaderFinished = true;
+        progress = 100;
+
+        loaderProgress.style.width = "100%";
+        loaderPercent.textContent = "100%";
+
+        if (progressTimer !== null) {
+          clearInterval(progressTimer);
+        }
+
+        setTimeout(hideLoader, 350);
+      }
+
+      // Sayfa daha önce yüklenmişse yükleme ekranını bekletme.
+      if (document.readyState === "complete") {
+        finishLoader();
+      } else {
+        window.addEventListener("load", finishLoader, {
+          once: true
+        });
+
+        progressTimer = setInterval(() => {
+          // Gerçek yükleme tamamlanana kadar %90'ı geçme.
+          if (progress < 90) {
+            progress = Math.min(
+              90,
+              progress + Math.random() * 8 + 2
+            );
+
+            loaderProgress.style.width = `${progress}%`;
+            loaderPercent.textContent =
+              `${Math.floor(progress)}%`;
+          }
+        }, 150);
+
+        // Beklenmeyen durumlarda ekranın sonsuza kadar kalmasını önle.
+        setTimeout(finishLoader, 8000);
+      }
+    } else {
+      hideLoader();
+    }
+
+    /* 6. UÇUŞAN MAVİ PARÇACIKLAR */
+
+    if (particles) {
+      const symbols = ["✦", "✧", "♡", "🐾", "·"];
+      let particleTimer = null;
+
+      function createParticle() {
+        if (document.hidden) return;
+        if (particles.childElementCount >= 24) return;
+
+        const particle = document.createElement("span");
+
+        particle.className = "particle";
+        particle.setAttribute("aria-hidden", "true");
+
+        particle.textContent =
+          symbols[Math.floor(Math.random() * symbols.length)];
+
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.fontSize =
+          `${12 + Math.random() * 22}px`;
+
+        particle.style.animationDuration =
+          `${6 + Math.random() * 8}s`;
+
+        particles.appendChild(particle);
+
+        particle.addEventListener("animationend", () => {
+          particle.remove();
+        }, { once: true });
+      }
+
+      function startParticles() {
+        if (particleTimer !== null || document.hidden) return;
+
+        particleTimer = setInterval(createParticle, 650);
+      }
+
+      function stopParticles() {
+        if (particleTimer !== null) {
+          clearInterval(particleTimer);
+          particleTimer = null;
+        }
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          stopParticles();
+        } else {
+          startParticles();
+        }
+      });
+
+      startParticles();
+    }
+
+    /* 7. KAYDIRMA ANİMASYONLARI */
+
+    const revealElements = document.querySelectorAll(
+      ".section .tag, .section h2, .section-text, " +
+      ".card, .gallery-grid img, .contact-form, .gallery-note"
+    );
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+      revealElements.forEach((element) => {
+        element.classList.add("reveal");
+        revealObserver.observe(element);
+      });
+    } else {
+      revealElements.forEach((element) => {
+        element.classList.add("visible");
+      });
+    }
+
+    /* 8. BUTON TIKLAMA EFEKTİ */
+
+    document.querySelectorAll(".btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (typeof button.animate !== "function") return;
+
+        button.animate(
+          [
+            { transform: "scale(1)" },
+            { transform: "scale(.96)" },
+            { transform: "scale(1)" }
+          ],
+          {
+            duration: 220,
+            easing: "ease-out"
+          }
+        );
+      });
+    });
+
+    console.log("🐯 BKM Tigers JavaScript başarıyla başlatıldı!");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBkmTigers, {
+      once: true
+    });
+  } else {
+    initBkmTigers();
+  }
+})();
